@@ -15,6 +15,7 @@ import { Alert, AlertTitle } from "@/components/ui/alert";
 import { Resolver } from "dns";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 
 
@@ -54,11 +55,33 @@ export const SignUpView = () => {
                 name: data.name,
                 email: data.email,
                 password: data.password,
+
+                callbackURL: "/",
             },
             {
                 onSuccess: () => {
                     setPending(false);
                     router.push("/");
+                     },
+                onError: ({error}) => {
+                    setError(error.message)
+                }
+            }
+        )
+    }
+
+    const onSocial =(provider: "github" | "google") => {
+        setError(null);
+        setPending(true);
+
+        authClient.signIn.social(
+            {
+                provider: provider,
+                callbackURL: "/",
+            },
+            {
+                onSuccess: () => {
+                    setPending(false);
                 },
                 onError: ({error}) => {
                     setError(error.message)
@@ -180,11 +203,15 @@ export const SignUpView = () => {
                         </span>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
-                            <Button variant="outline" type="button" className="w-full" disabled={pending}>
-                                Google
+                            <Button variant="outline" type="button" className="w-full" 
+                            disabled={pending}
+                            onClick={() => onSocial("google")}>
+                                <FaGoogle/>
                             </Button>
-                            <Button variant="outline" type="button" className="w-full" disabled={pending}>
-                                GitHub
+                            <Button variant="outline" type="button" className="w-full" 
+                            disabled={pending}
+                            onClick={() => onSocial("github")}>
+                                <FaGithub/>
                             </Button>
                         </div>
                         <div className="text-center text-sm">
