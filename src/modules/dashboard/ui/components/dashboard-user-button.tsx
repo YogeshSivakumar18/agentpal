@@ -1,13 +1,13 @@
 import { GeneratedAvatar } from "@/components/generated-avatar";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { authClient } from "@/lib/auth-client"
 import { ChevronDownIcon, CreditCardIcon, LogOutIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 export const DashboardUserButton = () => {
     const router=useRouter();
-
     const { data, isPending } = authClient.useSession();
     const onLogout = async () => {
         await authClient.signOut({
@@ -22,6 +22,7 @@ export const DashboardUserButton = () => {
     if(isPending || !data?.user){
         return null;
     }
+
     
     return (
         <DropdownMenu>
